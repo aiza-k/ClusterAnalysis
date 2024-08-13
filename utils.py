@@ -3,6 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial.distance import cdist
+from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score, calinski_harabasz_score, davies_bouldin_score
 
 def plot_heat_by_clus(biomass_data_clustered,products):
@@ -188,7 +189,7 @@ def get_dist(data, labels):
     for i, distances in enumerate(data_cluster_distances):
         print(f"Data point {i}: {distances}")
         
-    return 
+    return cluster_distances
 
 # # Calculate cluster centers for AgglomerativeClustering
 # cluster_centers = np.array([data_scaled[labels == i].mean(axis=0) for i in range(agg.n_clusters_)])
@@ -209,3 +210,26 @@ def get_dist(data, labels):
 # print("\nDistances between data points and cluster centers:")
 # for i, distances in enumerate(data_cluster_distances):
 #     print(f"Data point {i}: {distances}")
+
+def plot_cluster_heatmap_and_2d(data, labels, cluster_distances):
+    # Heatmap of cluster distances
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(cluster_distances, annot=True, cmap='YlGnBu')
+    plt.title('Heatmap of Distances Between Cluster Centers')
+    plt.show()
+
+    # 2D plot of clusters
+    # If data has more than 2 dimensions, use PCA for dimensionality reduction
+    if data.shape[1] > 2:
+        pca = PCA(n_components=2)
+        data_2d = pca.fit_transform(data)
+    else:
+        data_2d = data
+
+    plt.figure(figsize=(10, 8))
+    scatter = plt.scatter(data_2d[:, 0], data_2d[:, 1], c=labels, cmap='viridis')
+    plt.colorbar(scatter)
+    plt.title('2D Visualization of Clusters')
+    plt.xlabel('Dimension 1')
+    plt.ylabel('Dimension 2')
+    plt.show()
