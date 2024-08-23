@@ -1,6 +1,7 @@
 # Cluster Analysis
 
 This repo contains notebooks and functions used to run cluster analysis on biomass products. They can be clustered by either location or products.
+To run the analysis, see template files for a walkthrough (or previously done analysis for further functionality)
 
 ## Files
 
